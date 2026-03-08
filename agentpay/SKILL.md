@@ -14,9 +14,15 @@ AgentPay is managed x402 wallet + payment middleware for AI agents. The SDK inte
 
 ## Prerequisites
 
-- **API key**: User must have an AgentPay API key. They get one by signing in at the AgentPay dashboard (e.g. https://agentpay.solutions/dashboard) with Google or GitHub, or by calling `POST /api-keys` on the API.
+- **API key**: User must have an AgentPay API key. They get one by signing in at the AgentPay dashboard (e.g. https://agentpay.solutions/dashboard) with Google or GitHub, or by calling `POST /api-keys` on the API. Keys created via the API or this skill are "unclaimed" until the user signs up and links them in the dashboard (see below).
 - **Wallet**: For paying on a network (e.g. Base), the user must have created a wallet: `POST /wallets` with body `{"network":"base"}` using their API key. The dashboard can create wallets too.
 - **Config**: Prefer environment variables for keys—e.g. `AGENTPAY_API_KEY`, `AGENTPAY_API_URL` (or `baseUrl`). Production base URL is typically `https://api.agentpay.solutions`; local is `http://localhost:3000`.
+
+## Unclaimed keys and linking (skill / API-only users)
+
+When the user creates API keys and wallets via the skill or by calling the API without a dashboard account, those keys are **unclaimed**: they work for payments but are not tied to any account. Unclaimed keys have a limit of 3,000 payments/month per key. The user will not see them in any UI until they sign up.
+
+To get visibility and use plan limits: the user should sign up at https://agentpay.solutions/dashboard, then go to API Keys and click **Link existing key** and paste their API key. The key is then associated with their organization and they can see spend and wallets; the key also uses their plan's limits (Free: 3 keys, 3 wallets, 3,000 payments/month; paid plans offer more). If the user hits the unclaimed payment limit, the API returns 429 with a message to sign up and link the key.
 
 ## TypeScript SDK
 
@@ -70,9 +76,14 @@ If the user cannot add the SDK, use the API directly:
 - [ ] At least one wallet exists for the network used by the paid API (e.g. `base`) via `POST /wallets` with `X-Api-Key`.
 - [ ] API key and base URL are provided via env or config, not hardcoded.
 - [ ] Use the SDK for HTTP calls to paid endpoints so 402 is handled automatically.
+- [ ] If the user created keys via the skill/API and wants to see them in the dashboard, direct them to sign up at agentpay.solutions and use "Link existing key" on the API Keys page.
+
+## Why upgrade? (for users who ask)
+
+Most users don't hit payment-volume limits. What typically drives sign-up or upgrade: (1) **Need more keys or wallets** — Free allows 3 of each; a 4th requires upgrading to Developer. (2) **Want visibility** — Unclaimed keys don't show in any UI; sign up and link the key in the dashboard to see spend and wallets. (3) **Support** — Free has no formal support; Developer includes email support. (4) **Production** — Paid plans are for shipping something real with higher limits and support.
 
 ## Links
 
-- Dashboard (keys, wallets, spend): https://agentpay.solutions/dashboard
+- Dashboard (keys, wallets, spend, link key): https://agentpay.solutions/dashboard
 - API base (hosted): https://api.agentpay.solutions
-- Docs and quickstart: https://docs.agentpay.solutions
+- Docs (quickstart, plans and limits, API reference): https://docs.agentpay.solutions or this repo's README and apps/docs.
