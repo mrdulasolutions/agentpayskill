@@ -6,7 +6,7 @@ This repo contains the **AgentPay skill** for AI coding agents (Cursor, Openclaw
 
 ## What is AgentPay?
 
-AgentPay is managed x402 wallet + payment middleware for AI agents. You get an API key and managed wallets (create a wallet, then fund its address with USDC on Base); the SDK intercepts 402 responses, pays via the AgentPay API, and retries with the payment signature automatically. Think of it as Stripe for AI agents.
+AgentPay is managed x402 wallet + payment middleware for AI agents. You get an API key and managed wallets (create a wallet, then fund its address with USDC on Base, or send USDC to it via Coinbase); the SDK intercepts 402 responses, pays via the AgentPay API, and retries with the payment signature automatically. Think of it as Stripe for AI agents.
 
 - **Dashboard:** Sign up, get an API key, create wallets, view spend, **link keys** → [agentpay.solutions](https://agentpay.solutions/dashboard)
 - **Docs and quickstart:** [docs.agentpay.solutions](https://docs.agentpay.solutions) — including **Plans and limits** (unclaimed keys, link key, when to upgrade)
@@ -43,7 +43,7 @@ cp -r agentpay ~/.cursor/skills/   # global
 # or copy into your project: .cursor/skills/agentpay (project-only)
 ```
 
-After installation, the agent will use this skill when the user asks to pay for 402 APIs, integrate AgentPay, or work with x402. Your agent can then pay 402-protected APIs and pay other agents or people who accept x402 payments. The user still needs an API key (dashboard or `POST /api-keys`) and a wallet for the target network (e.g. Base)—create the wallet, then fund its address with USDC on Base. If they created keys via the skill and want to see them in the dashboard, they sign up and use **Link existing key**.
+After installation, the agent will use this skill when the user asks to pay for 402 APIs, integrate AgentPay, or work with x402. Your agent can then pay 402-protected APIs and pay other agents or people who accept x402 payments. The user still needs an API key (dashboard or `POST /api-keys`) and a wallet for the target network (e.g. Base)—create the wallet, then fund its address with USDC on Base (or send USDC to it via Coinbase). If they created keys via the skill and want to see them in the dashboard, they sign up and use **Link existing key**.
 
 ## License
 
