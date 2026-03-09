@@ -14,7 +14,7 @@ AgentPay is managed x402 wallet + payment middleware for AI agents. The SDK inte
 
 ## Prerequisites
 
-- **API key**: User must have an AgentPay API key. They get one by signing in at the AgentPay dashboard (e.g. https://agentpay.solutions/dashboard) with Google or GitHub, or by calling `POST /api-keys` on the API. Keys created via the API or this skill are "unclaimed" until the user signs up and links them in the dashboard (see below).
+- **API key**: User must have an AgentPay API key. They get one by signing in at the AgentPay dashboard (e.g. https://agentpay.solutions/dashboard) with Google or GitHub, or by calling `POST /api-keys` on the API (body: `{"label":"my-agent"}` or `{}`). If `POST /api-keys` returns 400 "Failed to create API key" or 503 "API key creation is not available", the hosted instance does not support key creation—direct the user to get a key from the dashboard. Keys created via the API or this skill are "unclaimed" until the user signs up and links them in the dashboard (see below).
 - **Wallet**: For paying on a network (e.g. Base), the user must have created a wallet: `POST /wallets` with body `{"network":"base"}` using their API key (dashboard can create wallets too). After creation, fund the wallet's address with USDC on Base (or send USDC to it via Coinbase) so the agent can pay 402-protected APIs and other agents or people who accept x402.
 - **Config**: Prefer environment variables for keys—e.g. `AGENTPAY_API_KEY`, `AGENTPAY_API_URL` (or `baseUrl`). Production base URL is typically `https://api.agentpay.solutions`; local is `http://localhost:3000`.
 
@@ -69,6 +69,10 @@ If the user cannot add the SDK, use the API directly:
 2. If response status is 402, read the `PAYMENT-REQUIRED` (or `payment-required`) header.
 3. Call AgentPay: `POST {baseUrl}/v1/pay` with headers `X-Api-Key: <key>`, body `{"paymentRequiredHeader": "<header value>", "requestUrl": "<original url>"}`.
 4. Use the returned `paymentSignature` and retry the original request with header `PAYMENT-SIGNATURE: <signature>`.
+
+## If API key creation fails (OpenCode, Cursor, etc.)
+
+When the agent tries `POST /api-keys` and gets 400 "Failed to create API key." or 503, the hosted API (e.g. api.agentpay.solutions) may not have key creation enabled. Tell the user: **Get an API key from the dashboard** at https://agentpay.solutions/dashboard (sign in with GitHub or Google, then copy the key from the API Keys page). Then create a wallet with `POST /wallets` and body `{"network":"base"}` using header `X-Api-Key: <their-key>`.
 
 ## Checklist when integrating
 
